@@ -73,36 +73,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }`,
         variabes: { search: search || '' },
       },
-      // query: { search: search || "" },
-      // query: { search: search || "" },
-      // TODO: use the right api to use graphql and pass parameters
-      //     data: `query SearchProducts {
-      //       products (first: 50, query: "${search || ""}, sortKey: ${sort}") {
-      //         edges {
-      //           node {
-      //             id
-      //             title
-      //             description
-      //             featuredImage {
-      //               id
-      //               url
-      //             }
-      //             handle
-      //             productType
-      //             priceRange {
-      //               minVariantPrice {
-      //                 amount
-      //                 currencyCode
-      //               }
-      //               maxVariantPrice {
-      //                 amount
-      //                 currencyCode
-      //               }
-      //             }
-      //           }
-      //         }
-      //       }
-      // }`,
     });
 
     const products = productsRequest.body?.data?.products?.edges;

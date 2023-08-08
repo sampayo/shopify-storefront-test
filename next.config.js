@@ -4,6 +4,7 @@ const ENV_VARIABLES_SERVER = [
   "STOREFRONT_API_KEY",
   "SHOPIFY_API_KEY",
   "SHOPIFY_SECRET_API_KEY",
+  "SHOPIFY_DOMAIN"
 ];
 
 const nextConfig = {
