@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import "@shopify/shopify-api/adapters/node";
-import { ApiVersion, Shopify, shopifyApi } from "@shopify/shopify-api";
+import { ApiVersion, shopifyApi } from "@shopify/shopify-api";
 import {
   shopifyApiKey,
   shopifySecretApiKey,
@@ -20,6 +20,9 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   try {
+    const { query } = req;
+    const search = query?.search as string | undefined;
+
     // const apiKey = storefrontApiKey();
     const apiSecretKey = shopifySecretApiKey();
     const apiKey = shopifyApiKey();
@@ -48,8 +51,10 @@ export default async function handler(
     const productsRequest = await storefrontClient.query<{
       data: { products: { edges: { node: Product }[] } };
     }>({
+      // query: { variables: {search: search || ""} },
+      // TODO: use the right api to use graphql and pass parameters
       data: `{
-        products (first: 10) {
+        products (first: 50, query: "${search || ""}") {
           edges {
             node {
               id

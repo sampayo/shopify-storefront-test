@@ -19,8 +19,11 @@ async function makeFetch<T>(
   });
 }
 
-const getProducts = () => {
-  return makeFetch<{ data: Product[] }>("/api/products");
+const getProducts = (search?: string) => {
+  const query = search ? `search=${search}` : undefined;
+  return makeFetch<{ data: Product[] }>(
+    ["/api/products", query].filter((x) => !!x).join("?")
+  );
 };
 
 function useGetProducts(search?: string) {
@@ -29,7 +32,7 @@ function useGetProducts(search?: string) {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    getProducts()
+    getProducts(search)
       .then((x) => {
         setProducts(x.data);
         setIsLoading(false);

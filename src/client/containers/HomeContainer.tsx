@@ -3,9 +3,15 @@ import Image from "next/image";
 import MainLayout from "../components/Layout/MainLayout";
 import useGetProducts from "../components/hooks/useGetProducts";
 import ProductCard from "../components/ProductCard";
+import HomeSearch, { IHomeSearchProps } from "./HomeSearch";
 
 function HomeContainer() {
-  const { products, error } = useGetProducts();
+  const [search, setSearch] = React.useState<string>();
+  const { products, error } = useGetProducts(search);
+
+  const handleOnSubmit: IHomeSearchProps["onSubmit"] = (v) => {
+    setSearch(v);
+  };
 
   console.log(products);
   const productComponents = products?.map((x) => {
@@ -19,6 +25,9 @@ function HomeContainer() {
           <h1 className="text-2xl font-bold tracking-tight text-gray-300">
             Products
           </h1>
+          <div>
+            <HomeSearch onSubmit={handleOnSubmit} />
+          </div>
 
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
             {productComponents}
