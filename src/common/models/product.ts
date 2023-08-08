@@ -18,4 +18,4 @@ export interface Product {
   };
 }
 
-export type ProductSortKeys = "TITLE" | "PRICE" | "RELEVANCE";
+export type ProductSortKeys = 'TITLE' | 'PRICE' | 'RELEVANCE';

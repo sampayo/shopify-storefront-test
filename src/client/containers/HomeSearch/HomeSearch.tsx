@@ -1,6 +1,6 @@
-import useTimeout from "@/client/components/hooks/useTimeout";
-import { ProductSortKeys } from "@/common/models/product";
-import React from "react";
+import React from 'react';
+import useTimeout from '@/client/components/hooks/useTimeout';
+import { ProductSortKeys } from '@/common/models/product';
 
 export interface IHomeSearchProps {
   className?: string;
@@ -10,9 +10,7 @@ export interface IHomeSearchProps {
 function HomeSearch(props: IHomeSearchProps) {
   const { onSubmit } = props;
   const { startTimeout, stopTimeout } = useTimeout(400);
-  const formDataRef = React.useRef<{ search?: string; sort?: ProductSortKeys }>(
-    {}
-  );
+  const formDataRef = React.useRef<{ search?: string; sort?: ProductSortKeys }>({});
 
   const submit = (formData?: { search?: string; sort?: ProductSortKeys }) => {
     stopTimeout();
@@ -25,9 +23,8 @@ function HomeSearch(props: IHomeSearchProps) {
     if (e?.preventDefault) e.preventDefault();
 
     const formData = new FormData(e.target as any);
-    const searchValue = (formData.get("search") as string) || undefined;
-    const sortingValue =
-      (formData.get("sorting") as ProductSortKeys) || undefined;
+    const searchValue = (formData.get('search') as string) || undefined;
+    const sortingValue = (formData.get('sorting') as ProductSortKeys) || undefined;
 
     formDataRef.current = { sort: sortingValue, search: searchValue };
     submit({ ...formDataRef.current });
@@ -36,15 +33,13 @@ function HomeSearch(props: IHomeSearchProps) {
   const handleOnChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const searchValue = (e.target.value as string) || undefined;
 
+    formDataRef.current = { ...formDataRef.current, search: searchValue };
     startTimeout(() => {
-      formDataRef.current = { ...formDataRef.current, search: searchValue };
       submit(formDataRef.current);
     });
   };
 
-  const handleOnSortChange: React.ChangeEventHandler<HTMLSelectElement> = (
-    e
-  ) => {
+  const handleOnSortChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const sortValue = (e.target.value as ProductSortKeys) || undefined;
 
     startTimeout(() => {

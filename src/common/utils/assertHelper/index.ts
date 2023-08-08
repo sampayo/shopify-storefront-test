@@ -2,8 +2,7 @@
 // import AppError from '../errorHelper/AppError';
 
 export function assertNonNullish<T = any>(condition: T, message?: string): asserts condition is NonNullable<T> {
-  if (condition === null || condition === undefined)
-    throw new Error(message || 'Value not found');
+  if (condition === null || condition === undefined) throw new Error(message || 'Value not found');
 }
 
 // export function assertNonString(condition: any, message?: string): asserts condition is string {

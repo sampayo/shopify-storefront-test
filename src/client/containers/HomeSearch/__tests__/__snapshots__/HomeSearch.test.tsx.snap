@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Containers HomeSearch render home search(snapshot) 1`] = `
+<form
+  className="gap-4 flex flex-col"
+  onSubmit={[Function]}
+>
+  <input
+    className="bg-transparent border border-solid border-gray-200 px-4 py-2 rounded-sm w-full"
+    name="search"
+    onChange={[Function]}
+    placeholder="Search"
+    type="input"
+  />
+  <select
+    className=" bg-transparent border border-solid border-gray-200 px-4 py-2 rounded-sm max-w-[200PX]"
+    defaultValue="RELEVANCE"
+    name="sorting"
+    onChange={[Function]}
+  >
+    <option
+      value="TITLE"
+    >
+      Title
+    </option>
+    <option
+      value="PRICE"
+    >
+      Price
+    </option>
+    <option
+      value="RELEVANCE"
+    >
+      Relevance
+    </option>
+  </select>
+  <button
+    hidden={true}
+    type="submit"
+  />
+</form>
+`;

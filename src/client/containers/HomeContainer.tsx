@@ -1,10 +1,10 @@
-import React from "react";
-import Image from "next/image";
-import MainLayout from "../components/Layout/MainLayout";
-import useGetProducts from "../components/hooks/useGetProducts";
-import ProductCard from "../components/ProductCard";
-import HomeSearch, { IHomeSearchProps } from "./HomeSearch";
-import { ProductSortKeys } from "@/common/models/product";
+import React from 'react';
+import Image from 'next/image';
+import { ProductSortKeys } from '@/common/models/product';
+import MainLayout from '../components/Layout/MainLayout';
+import ProductCard from '../components/ProductCard';
+import useGetProducts from '../components/hooks/useGetProducts';
+import HomeSearch, { IHomeSearchProps } from './HomeSearch';
 
 function HomeContainer() {
   const [query, setQuery] = React.useState<{
@@ -13,7 +13,7 @@ function HomeContainer() {
   }>();
   const { products, error } = useGetProducts(query?.search, query?.sort);
 
-  const handleOnSubmit: IHomeSearchProps["onSubmit"] = (v) => {
+  const handleOnSubmit: IHomeSearchProps['onSubmit'] = (v) => {
     setQuery(v);
   };
 
@@ -26,9 +26,7 @@ function HomeContainer() {
     <MainLayout>
       <div className="">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <h1 className="text-2xl font-bold tracking-tight text-gray-300">
-            Products
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tight text-gray-300">Products</h1>
           <div>
             <HomeSearch onSubmit={handleOnSubmit} />
           </div>

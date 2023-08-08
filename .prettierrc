@@ -1,0 +1,11 @@
+{
+  "useTabs": false,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "printWidth": 120,
+  "arrowParens": "always",
+  "importOrder": ["^react(.*)", "antd/(.*)", "<THIRD_PARTY_MODULES>", "@/(.*)", "^src/(.*)$", "^[./]"],
+  "importOrderSeparation": false,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}

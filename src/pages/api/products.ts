@@ -1,28 +1,20 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import "@shopify/shopify-api/adapters/node";
-import { ApiVersion, shopifyApi } from "@shopify/shopify-api";
-import {
-  shopifyApiKey,
-  shopifySecretApiKey,
-  shopifyShop,
-  storefrontApiKey,
-} from "@/common/configuration";
-import assertNonNullish from "@/common/utils/assertHelper";
-import { Product } from "@/common/models/product";
+import { ApiVersion, shopifyApi } from '@shopify/shopify-api';
+import '@shopify/shopify-api/adapters/node';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { shopifyApiKey, shopifySecretApiKey, shopifyShop, storefrontApiKey } from '@/common/configuration';
+import { Product } from '@/common/models/product';
+import assertNonNullish from '@/common/utils/assertHelper';
 
 type Data = {
   data?: Product[];
   errorMessage?: string;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   try {
     const { query } = req;
     const search = query?.search as string | undefined;
-    const sort = (query?.sort as string) || "RELEVANCE";
+    const sort = (query?.sort as string) || 'RELEVANCE';
 
     const apiSecretKey = shopifySecretApiKey();
     const apiKey = shopifyApiKey();
@@ -35,9 +27,9 @@ export default async function handler(
 
     const shopify = shopifyApi({
       apiSecretKey: apiSecretKey,
-      hostName: "http://localhost:3001",
+      hostName: 'http://localhost:3001',
       apiKey: apiKey,
-      scopes: ["read_products"],
+      scopes: ['read_products'],
       apiVersion: ApiVersion.April23,
       isEmbeddedApp: false,
     });
@@ -79,7 +71,7 @@ export default async function handler(
           }
         }
   }`,
-        variabes: { search: search || "" },
+        variabes: { search: search || '' },
       },
       // query: { search: search || "" },
       // query: { search: search || "" },
@@ -117,8 +109,6 @@ export default async function handler(
     res.status(200).json({ data: products.map((x) => x.node) });
   } catch (error: any) {
     console.log(error);
-    res
-      .status(500)
-      .json({ errorMessage: error?.message || "something went wrong" });
+    res.status(500).json({ errorMessage: error?.message || 'something went wrong' });
   }
 }

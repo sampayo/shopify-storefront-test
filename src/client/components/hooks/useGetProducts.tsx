@@ -1,20 +1,17 @@
-import { Product, ProductSortKeys } from "@/common/models/product";
-import { objectKeys } from "@/common/utils/objectHelper";
-import React from "react";
+import React from 'react';
+import { Product, ProductSortKeys } from '@/common/models/product';
+import { objectKeys } from '@/common/utils/objectHelper';
 
-async function makeFetch<T>(
-  url: string,
-  options?: { text?: boolean; headers?: any }
-) {
+async function makeFetch<T>(url: string, options?: { text?: boolean; headers?: any }) {
   const { text } = options || {};
   return fetch(url, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   }).then(async (res) => {
     const d = await (text ? res.text() : res.json());
-    if (!res.ok) throw new Error(d?.errorMessage || "bad Response");
+    if (!res.ok) throw new Error(d?.errorMessage || 'bad Response');
 
     return d as T;
   });
@@ -26,11 +23,9 @@ const getProducts = (query?: { [key in string]?: string | number }) => {
         .filter((x) => !!query[x])
         .map((x) => `${x}=${query[x]}`)
     : [];
-  const queryValuesFormatted = queryValues.join("&");
+  const queryValuesFormatted = queryValues.join('&');
 
-  return makeFetch<{ data: Product[] }>(
-    ["/api/products", queryValuesFormatted].filter((x) => !!x).join("?")
-  );
+  return makeFetch<{ data: Product[] }>(['/api/products', queryValuesFormatted].filter((x) => !!x).join('?'));
 };
 
 function useGetProducts(search?: string, sort?: ProductSortKeys) {

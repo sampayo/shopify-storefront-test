@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { Product } from "@/common/models/product";
-import React from "react";
+import React from 'react';
+import { Product } from '@/common/models/product';
 
 interface IProductProps {
   product: Product;
@@ -26,9 +26,7 @@ function ProductCard(props: IProductProps) {
               {product.title}
             </a>
           </h3>
-          <p className="mt-1 text-sm text-gray-500">
-            from {product.priceRange?.minVariantPrice?.amount}
-          </p>
+          <p className="mt-1 text-sm text-gray-500">from {product.priceRange?.minVariantPrice?.amount}</p>
         </div>
       </div>
     </div>
