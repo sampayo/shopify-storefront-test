@@ -1,4 +1,5 @@
-import { Product } from "@/common/models/product";
+import { Product, ProductSortKeys } from "@/common/models/product";
+import { objectKeys } from "@/common/utils/objectHelper";
 import React from "react";
 
 async function makeFetch<T>(
@@ -19,20 +20,26 @@ async function makeFetch<T>(
   });
 }
 
-const getProducts = (search?: string) => {
-  const query = search ? `search=${search}` : undefined;
+const getProducts = (query?: { [key in string]?: string | number }) => {
+  const queryValues = query
+    ? objectKeys(query)
+        .filter((x) => !!query[x])
+        .map((x) => `${x}=${query[x]}`)
+    : [];
+  const queryValuesFormatted = queryValues.join("&");
+
   return makeFetch<{ data: Product[] }>(
-    ["/api/products", query].filter((x) => !!x).join("?")
+    ["/api/products", queryValuesFormatted].filter((x) => !!x).join("?")
   );
 };
 
-function useGetProducts(search?: string) {
+function useGetProducts(search?: string, sort?: ProductSortKeys) {
   const [products, setProducts] = React.useState<Product[]>([]);
   const [error, setError] = React.useState<any>();
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
-    getProducts(search)
+    getProducts({ search, sort })
       .then((x) => {
         setProducts(x.data);
         setIsLoading(false);
@@ -41,7 +48,7 @@ function useGetProducts(search?: string) {
         setError(e);
         setIsLoading(false);
       });
-  }, [search]);
+  }, [search, sort]);
 
   return {
     products,

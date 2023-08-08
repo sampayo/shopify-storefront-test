@@ -1,19 +1,23 @@
 import useTimeout from "@/client/components/hooks/useTimeout";
+import { ProductSortKeys } from "@/common/models/product";
 import React from "react";
 
 export interface IHomeSearchProps {
   className?: string;
-  onSubmit?: (value?: string) => void;
+  onSubmit?: (query?: { search?: string; sort?: ProductSortKeys }) => void;
 }
 
 function HomeSearch(props: IHomeSearchProps) {
   const { onSubmit } = props;
   const { startTimeout, stopTimeout } = useTimeout(400);
+  const formDataRef = React.useRef<{ search?: string; sort?: ProductSortKeys }>(
+    {}
+  );
 
-  const submit = (searchValue: string | undefined) => {
+  const submit = (formData?: { search?: string; sort?: ProductSortKeys }) => {
     stopTimeout();
 
-    if (onSubmit) onSubmit(searchValue);
+    if (onSubmit) onSubmit(formData);
   };
 
   const handleOnSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
@@ -22,20 +26,35 @@ function HomeSearch(props: IHomeSearchProps) {
 
     const formData = new FormData(e.target as any);
     const searchValue = (formData.get("search") as string) || undefined;
-    // if (!searchValue || (searchValue?.length || 0) < 2) return;
+    const sortingValue =
+      (formData.get("sorting") as ProductSortKeys) || undefined;
 
-    submit(searchValue ? searchValue : undefined);
+    formDataRef.current = { sort: sortingValue, search: searchValue };
+    submit({ ...formDataRef.current });
   };
 
   const handleOnChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const searchValue = (e.target.value as string) || undefined;
-    // if (!searchValue || (searchValue?.length || 0) < 2) return;
 
-    startTimeout(() => submit(searchValue ? searchValue : undefined));
-    //
+    startTimeout(() => {
+      formDataRef.current = { ...formDataRef.current, search: searchValue };
+      submit(formDataRef.current);
+    });
   };
+
+  const handleOnSortChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    e
+  ) => {
+    const sortValue = (e.target.value as ProductSortKeys) || undefined;
+
+    startTimeout(() => {
+      formDataRef.current = { ...formDataRef.current, sort: sortValue };
+      submit(formDataRef.current);
+    });
+  };
+
   return (
-    <form onSubmit={handleOnSubmit}>
+    <form onSubmit={handleOnSubmit} className="gap-4 flex flex-col">
       <input
         type="input"
         placeholder="Search"
@@ -43,6 +62,16 @@ function HomeSearch(props: IHomeSearchProps) {
         onChange={handleOnChange}
         className="bg-transparent border border-solid border-gray-200 px-4 py-2 rounded-sm w-full"
       ></input>
+      <select
+        name="sorting"
+        defaultValue="RELEVANCE"
+        onChange={handleOnSortChange}
+        className=" bg-transparent border border-solid border-gray-200 px-4 py-2 rounded-sm max-w-[200PX]"
+      >
+        <option value="TITLE">Title</option>
+        <option value="PRICE">Price</option>
+        <option value="RELEVANCE">Relevance</option>
+      </select>
       <button type="submit" hidden />
     </form>
   );

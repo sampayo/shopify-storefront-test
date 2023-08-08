@@ -22,8 +22,8 @@ export default async function handler(
   try {
     const { query } = req;
     const search = query?.search as string | undefined;
+    const sort = (query?.sort as string) || "RELEVANCE";
 
-    // const apiKey = storefrontApiKey();
     const apiSecretKey = shopifySecretApiKey();
     const apiKey = shopifyApiKey();
     const storefrontAccessToken = storefrontApiKey();
@@ -42,7 +42,6 @@ export default async function handler(
       isEmbeddedApp: false,
     });
 
-    // console.log("-0-0-0-0-0-0");
     const storefrontClient = new shopify.clients.Storefront({
       domain: hostName,
       storefrontAccessToken: storefrontAccessToken,
@@ -51,10 +50,10 @@ export default async function handler(
     const productsRequest = await storefrontClient.query<{
       data: { products: { edges: { node: Product }[] } };
     }>({
-      // query: { variables: {search: search || ""} },
-      // TODO: use the right api to use graphql and pass parameters
-      data: `{
-        products (first: 50, query: "${search || ""}") {
+      data: {
+        variables: { search: search, sort: sort },
+        query: `query SearchProducts($search: String, $sort: ProductSortKeys) {
+        products (first: 50, query: $search, sortKey: $sort) {
           edges {
             node {
               id
@@ -80,6 +79,38 @@ export default async function handler(
           }
         }
   }`,
+        variabes: { search: search || "" },
+      },
+      // query: { search: search || "" },
+      // query: { search: search || "" },
+      // TODO: use the right api to use graphql and pass parameters
+      //     data: `query SearchProducts {
+      //       products (first: 50, query: "${search || ""}, sortKey: ${sort}") {
+      //         edges {
+      //           node {
+      //             id
+      //             title
+      //             description
+      //             featuredImage {
+      //               id
+      //               url
+      //             }
+      //             handle
+      //             productType
+      //             priceRange {
+      //               minVariantPrice {
+      //                 amount
+      //                 currencyCode
+      //               }
+      //               maxVariantPrice {
+      //                 amount
+      //                 currencyCode
+      //               }
+      //             }
+      //           }
+      //         }
+      //       }
+      // }`,
     });
 
     const products = productsRequest.body?.data?.products?.edges;

@@ -17,3 +17,5 @@ export interface Product {
     maxVariantPrice: VariantPrice;
   };
 }
+
+export type ProductSortKeys = "TITLE" | "PRICE" | "RELEVANCE";

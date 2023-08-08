@@ -9,7 +9,7 @@ function MainLayout(props: IMainLayoutProps) {
   return (
     <div className="flex min-h-screen flex-col items-center p-24">
       <header className="h-20">header</header>
-      <main className="flex-1 w-FULL">{children}</main>
+      <main className="flex-1 w-full">{children}</main>
       <footer className="h-20">footer</footer>
     </div>
   );

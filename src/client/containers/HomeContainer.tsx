@@ -4,13 +4,17 @@ import MainLayout from "../components/Layout/MainLayout";
 import useGetProducts from "../components/hooks/useGetProducts";
 import ProductCard from "../components/ProductCard";
 import HomeSearch, { IHomeSearchProps } from "./HomeSearch";
+import { ProductSortKeys } from "@/common/models/product";
 
 function HomeContainer() {
-  const [search, setSearch] = React.useState<string>();
-  const { products, error } = useGetProducts(search);
+  const [query, setQuery] = React.useState<{
+    search?: string;
+    sort?: ProductSortKeys;
+  }>();
+  const { products, error } = useGetProducts(query?.search, query?.sort);
 
   const handleOnSubmit: IHomeSearchProps["onSubmit"] = (v) => {
-    setSearch(v);
+    setQuery(v);
   };
 
   console.log(products);
